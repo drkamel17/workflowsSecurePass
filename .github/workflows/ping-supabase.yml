@@ -2,7 +2,7 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '17 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -17,7 +17,8 @@ jobs:
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             "${{ secrets.SUPABASE_URL }}/rest/v1/passwords?select=id&limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Prefer: count=exact")
           if [ "$STATUS" != "200" ]; then
             echo "Supabase ping failed with status $STATUS"
             exit 1
